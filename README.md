@@ -13,7 +13,7 @@ Ce projet a pour but de développer une Intelligence Artificielle qui permet :
 ## Installation de Java
 
 **ATTENTION**
-Les bibliothèques Lejos ne sont compatibles qu'avec Java 32-bits, il vous faudra donc téleécharger la bonne version du JDK !
+Les bibliothèques Lejos ne sont compatibles qu'avec Java 32-bits, il vous faudra donc télécharger la bonne version du JDK !
 Les téléchargements et instructions d'installations se trouvent sur [le site d'Oracle consacré à Java](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 Sélectionner "Java SE Development Kit" pour "Windows x86"  
 
