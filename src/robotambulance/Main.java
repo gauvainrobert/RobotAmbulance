@@ -21,7 +21,7 @@ public class Main {
 	private static LightSensor lightSensor = new LightSensor(SensorPort.S1);
 	private static int initialSpeed = 100;
 	private static int initialLightValue;
-	private static Side side = Side.RIGHT;
+	private static Direction side = Direction.RIGHT;
 	private static int differenceColor = 50;
 	private static float scaleSpeed = 0.5f;
 	private static int nbValueRequiredToChangeSide = 2;
@@ -135,7 +135,7 @@ public class Main {
 
 
 	private static void changeValueSide() {
-		side=side==Side.RIGHT?Side.LEFT:Side.RIGHT;
+		side=side==Direction.RIGHT?Direction.LEFT:Direction.RIGHT;
 		
 	}
 
@@ -159,14 +159,14 @@ public class Main {
 		while(c2) {
 			c1=Math.abs(initialLightValue-(lv=lightSensor.getNormalizedLightValue()))<differenceColor;
 			if (!c1) cpt++;
-			if(side==Side.LEFT)
+			if(side==Direction.LEFT)
 				motorD.setSpeed((int)((float)initialSpeed*scaleSpeed));
 			else
 				motorG.setSpeed((int)((float)initialSpeed*scaleSpeed));
 			Thread.sleep(delayLightSensor);
 			c2=cpt<nbValueRequiredToChangeSide;
 		}
-		if(side==Side.LEFT)
+		if(side==Direction.LEFT)
 			motorD.setSpeed(initialSpeed);
 		else
 			motorG.setSpeed(initialSpeed);
@@ -297,10 +297,10 @@ public class Main {
 	private static void halfTurn() {
 		motorG.stop();
 		motorD.stop();
-		if(side==Side.LEFT)
-			side=Side.RIGHT;
+		if(side==Direction.LEFT)
+			side=Direction.RIGHT;
 		else
-			side=Side.LEFT;
+			side=Direction.LEFT;
 		
 	}
 	
@@ -314,14 +314,14 @@ public class Main {
 		while(c2) {
 			c1=Math.abs(initialLightValue-(lv=lightSensor.getNormalizedLightValue()))>differenceColor;
 			if (!c1) cpt++;
-			if(side==Side.RIGHT)
+			if(side==Direction.RIGHT)
 				motorG.setSpeed((int)((float)initialSpeed*scaleSpeed));
 			else
 				motorD.setSpeed((int)((float)initialSpeed*scaleSpeed));
 			Thread.sleep(delayLightSensor);
 			c2=cpt<nbValueRequiredToChangeSide;
 		}
-		if(side==Side.RIGHT)
+		if(side==Direction.RIGHT)
 			motorG.setSpeed(initialSpeed);
 		else
 			motorD.setSpeed(initialSpeed);
