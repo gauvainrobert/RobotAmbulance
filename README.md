@@ -35,4 +35,8 @@ Nous avons rencontré des problèmes avec Eclipse 64-bits, c'est pourquoi nous vou
 L'extension Lejos, qui permet d'uploader facilement les programmessur les briques NXT, est installable en suivant [ce tutoriel](http://www.lejos.org/nxt/nxj/tutorial/Preliminaries/UsingEclipse.htm) (Categorie Installing the Eclipse plugin)  
 Il vous faudra ensuite importer le projet dans Eclipse, faire un clic droit dessus, et cliquer sur Lejos NXJ > Convert to Lejos NXJ project
 
+## Utilisation de Robot Connection
 
+Robot connection est le serveur qui doit envoyer les informations aux robots en bluetooth
+
+https://github.com/gauvainrobert/RobotConnection.git

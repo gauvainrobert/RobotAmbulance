@@ -10,6 +10,7 @@ import robotambulance.bluetooth.Client;
 import robotambulance.course.Course;
 import robotambulance.course.Position;
 import robotambulance.course.Vertice;
+import robotambulance.util.Constants;
 import robotambulance.util.Direction;
 
 public class Main {
@@ -164,46 +165,73 @@ public class Main {
 				halfturn=false;
 			}
 			
-			if(dir!=oldside) {
-				try {
-					pid.changeSide(dir);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				oldside=dir;
-			}
+//			if(dir!=oldside) {
+//				pid.changeSide(dir);
+//				oldside=dir;
+//			}
 			
 			
-			distanceToTravel = Course.getDistance(course.getRoads(),position.getFrom(),position.getTo())-position.getDistanceFrom();
+//			distanceToTravel = Course.getDistance(course.getRoads(),position.getFrom(),position.getTo())-position.getDistanceFrom();
+			
+			pid.travel();
+			
 			if(dir==Direction.LEFT) {
 				neighbour = position.getTo().getLeftNeighbour();
 			}else if(dir==Direction.RIGHT) {
 				neighbour = position.getTo().getRightNeighbour();				
 			}
-			LCD.drawString(""+distanceToTravel, 0, 1);
-			LCD.drawString(""+position.getTo().getName()+" "+neighbour.getName(), 0, 3);
-			distanceToTravel += Course.getDistance(course.getRoads(),position.getTo(),neighbour);
 			
-			LCD.drawString(""+distanceToTravel, 0, 2);
 			
-			pid.travel(distanceToTravel);
 			
+			try {
+				intersection(pid, course, position, dir, neighbour);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		
+			
+			
+//			LCD.drawString(""+distanceToTravel, 0, 1);
+//			LCD.drawString(""+position.getTo().getName()+" "+neighbour.getName(), 0, 3);
+//			distanceToTravel += Course.getDistance(course.getRoads(),position.getTo(),neighbour);
+//			
+//			LCD.drawString(""+distanceToTravel, 0, 2);
+//			
+//			pid.travel(distanceToTravel);
+	
 			position.setFrom(neighbour);
 			position.setTo(neighbour.getBackwardNeighbour());
 			position.setDistanceFrom(0);
 			client.sendPosition(position);
 			
 			directions.addAll(client.getDirections());
+			
+			
+			
 		}
 		pid.getMotorG().stop();
 		pid.getMotorD().stop();
 		
-		Button.waitForAnyPress();
 		
-		
-		
-		
+	}
+
+	private static void intersection(PID pid, Course course, Position position, Direction dir, Vertice neighbour) throws InterruptedException {
+		float distance = Course.getDistance(course.getRoads(),position.getTo(),neighbour);
+		if(dir==Direction.LEFT) {
+			if(distance == Constants.distanceTurn) {
+				pid.leftTurn();
+			}else {
+				pid.intersectionStraight();
+			}
+		}else if(dir==Direction.RIGHT) {
+			if(distance == Constants.distanceTurn) {
+				pid.rightTurn();
+			}else {
+				pid.intersectionStraight();
+			}				
+		}
 	}
 
 	private static Direction headAndRemove(List<Direction> directions) {
