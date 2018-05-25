@@ -127,8 +127,6 @@ public class Main {
 		Client client = new Client();
 		Course course = Course.compet2();
 		
-		Button.waitForAnyPress();
-		
 		Position position = null;
 		try {
 			position = client.receivePosition(course);
@@ -155,7 +153,12 @@ public class Main {
 			dir = headAndRemove(directions);
 			LCD.drawString(dir.toString(), 0, 0);
 			if(dir==Direction.HALF_TURN) {
-				pid.halfTurn();
+				try {
+					pid.halfTurn();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				course.inversePosition(position);
 				halfturn = true;
 			}
@@ -215,22 +218,17 @@ public class Main {
 		pid.getMotorD().stop();
 		
 		
+		pid.goOut();
+		Button.waitForAnyPress();
+		
+		
 	}
 
 	private static void intersection(PID pid, Course course, Position position, Direction dir, Vertice neighbour) throws InterruptedException {
-		float distance = Course.getDistance(course.getRoads(),position.getTo(),neighbour);
 		if(dir==Direction.LEFT) {
-			if(distance == Constants.distanceTurn) {
-				pid.leftTurn();
-			}else {
-				pid.intersectionStraight();
-			}
+			pid.leftTurn();
 		}else if(dir==Direction.RIGHT) {
-			if(distance == Constants.distanceTurn) {
-				pid.rightTurn();
-			}else {
-				pid.intersectionStraight();
-			}				
+			pid.rightTurn();				
 		}
 	}
 

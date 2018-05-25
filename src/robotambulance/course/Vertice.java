@@ -3,7 +3,7 @@ package robotambulance.course;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Vertice {
+public class Vertice implements Comparable<Vertice>{
 	private String name;
 	private Vertice leftNeighbour;
 	private Vertice rightNeighbour;
@@ -114,6 +114,15 @@ public class Vertice {
 	@Override
 	public String toString() {
 		return "Vertice [name=" + name + "]";
+	}
+
+
+
+
+
+	@Override
+	public int compareTo(Vertice v) {
+		return name.compareTo(v.getName());
 	}
 	
 	

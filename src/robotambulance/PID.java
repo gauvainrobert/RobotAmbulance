@@ -1,14 +1,11 @@
 package robotambulance;
 
-import lejos.nxt.Button;
-import lejos.nxt.LCD;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
 import lejos.robotics.navigation.DifferentialPilot;
-import lejos.util.PIDController;
 import robotambulance.util.Constants;
 import robotambulance.util.Direction;
 
@@ -115,9 +112,10 @@ public class PID {
 
 
 
-	public void halfTurn() {
+	public void halfTurn() throws InterruptedException {
 		pilot.rotate(180);
-		pilot.travel(Constants.distanceToTravelAfterHalfTurn);
+		replace(Direction.LEFT);
+		pilot.travel(Constants.distanceToTravelAfterHalfTurn-4.f);
 	}
 
 
@@ -183,13 +181,14 @@ public class PID {
 
 
 
-	private void replace() throws InterruptedException {
-		if(lightSensorL.getLightValue()>Constants.offset) {
-			rotateLeft();
+	private void replace(Direction dir) throws InterruptedException {
+		if(dir==Direction.LEFT) {
+			travel(2.f, Direction.LEFT);
+			travel(2.f, Direction.RIGHT);
+		}else {
+			travel(2.f, Direction.RIGHT);
+			travel(2.f, Direction.LEFT);
 		}
-		if(lightSensorR.getLightValue()>Constants.offset) {
-			rotateRight();
-		}		
 	}
 
 
@@ -293,13 +292,10 @@ public class PID {
 		long start,stop;
 		int lvL,lvR;
 		int errorL,errorR,lastErrorL,lastErrorR,derivativeL,derivativeR,TurnL,TurnR,powerG,powerD;
-		boolean crossline=false;
-		boolean b;
-		boolean intersection = false;
 		
 		int Tp = 300;
-		int Kp = 1000;
-		int Ki = 30;
+		int Kp = 1500;
+		int Ki = 0;
 		int Kd = 0;
 		
 		long timeleft = 0;
@@ -320,9 +316,9 @@ public class PID {
 			lvR = lightSensorR.getLightValue();
 			
 			
-			errorL = lvL - Constants.offset;
+			errorL = lvL - Constants.offsetSingleCaptor;
 			
-			errorR = lvR - Constants.offset;
+			errorR = lvR - Constants.offsetSingleCaptor;
 			
 			integralL += errorL;
 			integralR += errorR;
@@ -420,8 +416,6 @@ public class PID {
 //			}
 //			
 		}
-		
-		Sound.beep();
 		
 	}
 
@@ -585,20 +579,30 @@ public class PID {
 
 	public void leftTurn() throws InterruptedException {
 		pilot.travel(20);
-		travel(20.f,Direction.LEFT);
-		pilot.travel(40);
-		replace();
+		travel(25.f,Direction.LEFT);
+		pilot.travel(20);
+		replace(Direction.LEFT);
 	}
 
 	public void rightTurn() throws InterruptedException {
 		pilot.travel(20);
-		travel(20.f,Direction.RIGHT);
-		pilot.travel(40);
-		replace();
+		travel(25.f,Direction.RIGHT);
+		pilot.travel(20);
+		replace(Direction.RIGHT);
 	}
 
-	public void intersectionStraight() {
-		pilot.travel(300);
+	
+
+
+
+
+
+
+
+
+
+	public void goOut() {
+		pilot.forward();
 		
 	}
 	

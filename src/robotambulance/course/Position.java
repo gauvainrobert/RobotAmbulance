@@ -1,6 +1,6 @@
 package robotambulance.course;
 
-public class Position {
+public class Position implements Comparable<Position>{
 	private Vertice from;
 	private Vertice to;
 	private float distanceFrom;
@@ -47,13 +47,42 @@ public class Position {
 	public float getDistanceFrom() {
 		return distanceFrom;
 	}
+	
+	
 
 
+	@Override
+	public boolean equals(Object o) {
+		
+		if(o!=null && o instanceof Position) {
+			Position pos = (Position) o;
+			return pos.getFrom().equals(this.getFrom()) 
+					|| pos.getTo().equals(this.getTo()) 
+					|| pos.getFrom().equals(this.getTo()) 
+					|| pos.getTo().equals(this.getFrom());
+		}
+		return false;
+	}
+	
 
 
 	@Override
 	public String toString() {
 		return "Position [from=" + from + ", to=" + to + ", distanceFrom=" + distanceFrom + "]";
+	}
+
+
+
+
+	@Override
+	public int compareTo(Position pos) {
+		int c1 = from.compareTo(pos.from);
+		if(c1==0) {
+			int c2 = to.compareTo(pos.getTo());
+
+			return c2;
+		}
+		return c1;
 	}
 	
 	
