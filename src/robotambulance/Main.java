@@ -10,7 +10,6 @@ import robotambulance.bluetooth.Client;
 import robotambulance.course.Course;
 import robotambulance.course.Position;
 import robotambulance.course.Vertice;
-import robotambulance.util.Constants;
 import robotambulance.util.Direction;
 
 public class Main {
@@ -140,9 +139,6 @@ public class Main {
 		List<Direction> directions = new ArrayList<>();
 		directions.addAll(client.getDirections());
 		
-
-		float distanceToTravel;
-		Direction oldside = null;
 		//int cptline = 0;	
 		boolean halfturn=false;
 		Direction dir;
@@ -184,6 +180,10 @@ public class Main {
 				neighbour = position.getTo().getRightNeighbour();				
 			}
 			
+			position.setFrom(position.getTo());
+			position.setTo(neighbour);
+			position.setDistanceFrom(0);
+			client.sendPosition(position);
 			
 			
 			try {
@@ -193,17 +193,6 @@ public class Main {
 				e.printStackTrace();
 			}
 			
-		
-			
-			
-//			LCD.drawString(""+distanceToTravel, 0, 1);
-//			LCD.drawString(""+position.getTo().getName()+" "+neighbour.getName(), 0, 3);
-//			distanceToTravel += Course.getDistance(course.getRoads(),position.getTo(),neighbour);
-//			
-//			LCD.drawString(""+distanceToTravel, 0, 2);
-//			
-//			pid.travel(distanceToTravel);
-	
 			position.setFrom(neighbour);
 			position.setTo(neighbour.getBackwardNeighbour());
 			position.setDistanceFrom(0);

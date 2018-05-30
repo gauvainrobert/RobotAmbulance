@@ -113,9 +113,10 @@ public class PID {
 
 
 	public void halfTurn() throws InterruptedException {
+		replace(Direction.LEFT);
+		replace(Direction.RIGHT);
 		pilot.rotate(180);
 		replace(Direction.LEFT);
-		pilot.travel(Constants.distanceToTravelAfterHalfTurn-4.f);
 	}
 
 
@@ -294,9 +295,9 @@ public class PID {
 		int errorL,errorR,lastErrorL,lastErrorR,derivativeL,derivativeR,TurnL,TurnR,powerG,powerD;
 		
 		int Tp = 300;
-		int Kp = 1500;
-		int Ki = 0;
-		int Kd = 0;
+		int Kp = 1000;
+		int Ki = 30;
+		int Kd = 50;
 		
 		long timeleft = 0;
 		long timeright = 0;
@@ -378,19 +379,19 @@ public class PID {
 			lastErrorL = errorL;
 			lastErrorR = errorR;
 			
-			if(lightSensorL.getLightValue()>Constants.offsetSimpleLine) {
-				timeleft = System.currentTimeMillis();
-			}
-			
-			if(lightSensorR.getLightValue()>Constants.offsetSimpleLine) {
-				timeright = System.currentTimeMillis();
-			}
-			
-			if(distance > 20.f && timeleft!=0 && timeright != 0 && Math.abs(timeleft-timeright)<2*Constants.DELAY_LIGHTSENSOR) {
-				pilot.stop();
-				Sound.twoBeeps();
-				end=true;
-			}
+//			if(lightSensorL.getLightValue()>Constants.offsetSimpleLine) {
+//				timeleft = System.currentTimeMillis();
+//			}
+//			
+//			if(lightSensorR.getLightValue()>Constants.offsetSimpleLine) {
+//				timeright = System.currentTimeMillis();
+//			}
+//			
+//			if(distance > 23.f && timeleft!=0 && timeright != 0 && Math.abs(timeleft-timeright)<5*Constants.DELAY_LIGHTSENSOR) {
+//				pilot.stop();
+//				Sound.twoBeeps();
+//				end=true;
+//			}
 			
 			try {
 				Thread.sleep(Constants.DELAY_LIGHTSENSOR);
@@ -578,16 +579,14 @@ public class PID {
 
 
 	public void leftTurn() throws InterruptedException {
-		pilot.travel(20);
+		replace(Direction.LEFT);
 		travel(25.f,Direction.LEFT);
-		pilot.travel(20);
 		replace(Direction.LEFT);
 	}
 
 	public void rightTurn() throws InterruptedException {
-		pilot.travel(20);
+		replace(Direction.RIGHT);
 		travel(25.f,Direction.RIGHT);
-		pilot.travel(20);
 		replace(Direction.RIGHT);
 	}
 
